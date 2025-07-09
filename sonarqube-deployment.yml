@@ -19,6 +19,13 @@ spec:
         image: sonarqube:9.9-community
         ports:
         - containerPort: 9000
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "500m"
+          limits:
+            memory: "3Gi"
+            cpu: "1"
         volumeMounts:
         - name: sonar-data
           mountPath: /opt/sonarqube/data
