@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sonarqube
-  labels:
-    app: sonarqube
 spec:
   replicas: 1
   selector:
@@ -15,28 +13,32 @@ spec:
         app: sonarqube
     spec:
       containers:
-      - name: sonarqube
-        image: sonarqube:9.9-community
-        ports:
-        - containerPort: 9000
-        resources:
-          requests:
-            memory: "2Gi"
-            cpu: "500m"
-          limits:
-            memory: "3Gi"
-            cpu: "1"
-        volumeMounts:
-        - name: sonar-data
-          mountPath: /opt/sonarqube/data
-        - name: sonar-logs
-          mountPath: /opt/sonarqube/logs
-        - name: sonar-extensions
-          mountPath: /opt/sonarqube/extensions
+        - name: sonarqube
+          image: sonarqube:9.9-community
+          ports:
+            - containerPort: 9000
+          env:
+            - name: SONAR_ES_BOOTSTRAP_CHECKS_DISABLE
+              value: "true"
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "500m"
+            limits:
+              memory: "4Gi"
+              cpu: "1000m"
+          volumeMounts:
+            - mountPath: /opt/sonarqube/data
+              name: sonarqube-data
+            - mountPath: /opt/sonarqube/logs
+              name: sonarqube-logs
+            - mountPath: /opt/sonarqube/extensions
+              name: sonarqube-extensions
+
       volumes:
-      - name: sonar-data
-        emptyDir: {}
-      - name: sonar-logs
-        emptyDir: {}
-      - name: sonar-extensions
-        emptyDir: {}
+        - name: sonarqube-data
+          emptyDir: {}
+        - name: sonarqube-logs
+          emptyDir: {}
+        - name: sonarqube-extensions
+          emptyDir: {}
