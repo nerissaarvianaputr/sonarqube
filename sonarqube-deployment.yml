@@ -35,6 +35,7 @@ spec:
             - mountPath: /opt/sonarqube/extensions
               name: sonarqube-extensions
 
+
       volumes:
         - name: sonarqube-data
           emptyDir: {}
